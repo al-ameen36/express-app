@@ -13,7 +13,8 @@ const client = new MongoClient(uri, {
   },
   ssl: true,
   tls: true,
-  tlsAllowInvalidCertificates: false,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 // Function to connect to the database

@@ -1,5 +1,9 @@
+const { configDotenv } = require("dotenv");
 const express = require("express");
 const app = express();
+
+configDotenv();
+
 const port = process.env.PORT || 3000;
 const host = "0.0.0.0";
 

@@ -1,22 +1,36 @@
-const { configDotenv } = require("dotenv");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ServerApiVersion } = require("mongodb");
+require("dotenv").configDotenv();
 
-configDotenv();
-
+// Get MongoDB connection string from environment variables
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
 
-async function run() {
+// Create a MongoClient with proper options
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+  ssl: true,
+  tls: true,
+  tlsAllowInvalidCertificates: false,
+});
+
+// Function to connect to the database
+async function connectToDatabase() {
   try {
     await client.connect();
+    console.log("Successfully connected to MongoDB Atlas!");
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+    console.log("Database connection verified via ping");
+
+    return client;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1);
   }
 }
-run().catch(console.dir);
+
+module.exports = { client, connectToDatabase };

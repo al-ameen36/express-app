@@ -1,11 +1,12 @@
 const { configDotenv } = require("dotenv");
 const express = require("express");
-const app = express();
+const db = require("./db");
 
 configDotenv();
 
 const port = process.env.PORT || 3000;
 const host = "0.0.0.0";
+const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
